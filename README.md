@@ -51,9 +51,9 @@ from modelscope import snapshot_download
 snapshot_download('damo/speech_paraformer_asr-en-16k-vocab4199-pytorch',local_dir='{path_to_save_model}')
 ```
 
-Copy the model file to VHASR/pretrained_model/VHASR_base
+Copy the model file and othe config files to VHASR/pretrained_model/VHASR_base
 ```sh
-cp speech_paraformer_asr-en-16k-vocab4199-pytorch/model.pb VHASR/pretrained_model/VHASR_base
+cp -rn {path_to_save_model}/speech_paraformer_asr-en-16k-vocab4199-pytorch/* VHASR/pretrained_model/VHASR_base
 ```
 
 Start training.
