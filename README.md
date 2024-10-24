@@ -21,7 +21,9 @@ VHASR/
     └── OpenImages/
 ```
 VHASR/dataset/{dataset}/train_data/{split}/img.txt and VHASR/dataset/{dataset}/train_data/{split}/wav.scp record the required image path and audio path.
+
 The audio of Flickr8k is available at https://sls.csail.mit.edu/downloads/placesaudio/downloads.cgi.
+
 The audios of ADE20k, COCO and OpenImages are available at https://google.github.io/localized-narratives/.
 
 ### Prepare pretrained model
