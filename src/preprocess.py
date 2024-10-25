@@ -186,6 +186,7 @@ class CommonPreprocessor(AbsPreprocessor):
             prompt_name: str = "prompt",
             split_with_space: bool = False,
             seg_dict_file: str = None,
+            clip_path: str = None
     ):
         super().__init__(train)
         self.train = train
@@ -261,8 +262,11 @@ class CommonPreprocessor(AbsPreprocessor):
                 )
         else:
             self.noises = None
-        
-        self.preprocessor = CLIPProcessor.from_pretrained("/data/hujl/.cache/huggingface/hub/models--openai--clip-vit-base-patch32")
+
+        if clip_path:
+            self.preprocessor = CLIPProcessor.from_pretrained(clip_path)
+        else:
+            self.preprocessor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
     def _speech_process(
             self, data: Dict[str, Union[str, np.ndarray]]
@@ -842,6 +846,7 @@ def build_preprocess(args, train):
             noise_apply_prob=args.noise_apply_prob if hasattr(args, "noise_apply_prob") else 1.0,
             noise_db_range=args.noise_db_range if hasattr(args, "noise_db_range") else "13_15",
             speech_volume_normalize=args.speech_volume_normalize if hasattr(args, "rir_scp") else None,
+            clip_path=args.vh_conf["clip_path"] if hasattr(args, "vh_conf") else None,
         )
     elif args.task_name == "punc":
         token_types = [args.token_type, args.token_type]
