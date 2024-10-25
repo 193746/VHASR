@@ -94,7 +94,9 @@ CUDA_VISIBLE_DEVICES=1 python src/evaluate.py \
 ```
 
 You can download [Trained VHASR](https://drive.google.com/drive/folders/1fXQhNITijB2pG1R0ove9qskkU6ivMDnU?usp=drive_link) from Google Drive and put the files in VHASR/pretrained_model/VHASR_{dataset}.
+
 Trained VHASR is also available at Huggingface: 
+
 [VHASR_ADE20k](https://huggingface.co/Rinawell/VHASR_ADE20k) | [VHASR_COCO](https://huggingface.co/Rinawell/VHASR_COCO) | [VHASR_Flickr8k](https://huggingface.co/Rinawell/VHASR_Flickr8k) | [VHASR_OpenImages](https://huggingface.co/Rinawell/VHASR_OpenImages)
 
 
