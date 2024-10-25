@@ -138,3 +138,5 @@ Most of the code in this repository is modified from https://github.com/modelsco
       url={https://arxiv.org/abs/2410.00822}, 
 }
 ```
+
+### License: cc-by-nc-4.0
