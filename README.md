@@ -123,6 +123,18 @@ CUDA_VISIBLE_DEVICES=1 python src/evaluate.py \
 --merge_method 3
 ```
 
+### Infer
+We also provide an inference interface. If you are interested in our work, you can use large-scale data to train your own model and perform inference using the following command. Note that you should place the config file of clip in '{model_file}/clip_config' like the four pretrained models we provide. 
+
+```sh
+cd VHASR
+CUDA_VISIBLE_DEVICES=1 python src/infer.py \
+--model_name "pretrained_model/VHASR_Flickr8k" \
+--speech_path "dataset/Flickr8k/audio/wavs/3385593926_d3e9c21170_0.wav" \
+--image_path "dataset/Flickr8k/image/3385593926_d3e9c21170.jpg" \
+--merge_method 3
+```
+
 ### Statement
 Most of the code in this repository is modified from https://github.com/modelscope/FunASR/tree/v0.8.8 
 
