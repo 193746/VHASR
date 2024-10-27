@@ -30,6 +30,24 @@ class Merger():
         merge_wer=error_calculator.calculate_wer(merge_list,gold_list)
         return merge_wer
 
+    def merge_two_stram_by_m3_infer(self,error_calculator,img_embeds,asr_out,bias_out,va_similarity):
+        asr_list=error_calculator.convert_to_char_single(asr_out)
+        bias_list=error_calculator.convert_to_char_single(bias_out)
+        va_similarity=torch.where(va_similarity>=0.8,1,0)
+
+        merge_list=[]
+        for j in range(len(asr_list)):
+            text=[asr_list[j],bias_list[j]]
+            img_embed=img_embeds[j]
+            if text[0]==text[1] or va_similarity[j].item()==0: # filter img_wer of low audio-image similarity 
+                merge_list.append(text[0])
+                continue     
+            # cal vision-text similarity
+            merge_text=self.cal_similarity(img_embed,text)         
+            merge_list.append(merge_text)
+
+        return merge_list
+
     def merge_two_stram_by_m2(self,error_calculator,img_embeds,asr_out,bias_out,gold_out):
         asr_list=error_calculator.convert_to_char_single(asr_out)
         bias_list=error_calculator.convert_to_char_single(bias_out)
@@ -47,6 +65,22 @@ class Merger():
 
         merge_wer=error_calculator.calculate_wer(merge_list,gold_list)
         return merge_wer
+
+    def merge_two_stram_by_m2_infer(self,error_calculator,img_embeds,asr_out,bias_out):
+        asr_list=error_calculator.convert_to_char_single(asr_out)
+        bias_list=error_calculator.convert_to_char_single(bias_out)
+
+        merge_list=[]
+        for j in range(len(asr_list)):
+            text=[asr_list[j],bias_list[j]]
+            img_embed=img_embeds[j]
+            if text[0]==text[1]:
+                merge_list.append(text[0])
+                continue
+            merge_text=self.cal_similarity(img_embed,text)         
+            merge_list.append(merge_text)
+
+        return merge_list
 
     def cal_similarity(self,img_embed,text):
         text_inputs=self.preprocessor(text=text,return_tensors="pt", padding=True)

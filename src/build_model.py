@@ -1,5 +1,5 @@
 import logging
-
+import os
 import torch
 from funasr.layers.global_mvn import GlobalMVN
 from funasr.layers.utterance_mvn import UtteranceMVN
@@ -371,9 +371,14 @@ def build_asr_model(args):
             **bias_decoder_conf,
         )
 
-        from transformers import CLIPModel
-        clip_encoder = CLIPModel.from_pretrained(args.vh_conf["clip_path"]).vision_model
-        visual_adapter=CLIPModel.from_pretrained(args.vh_conf["clip_path"]).visual_projection
+        from transformers import CLIPModel,AutoConfig
+        if not args.infer:
+            clip_encoder=CLIPModel.from_pretrained(args.vh_conf["clip_path"]).vision_model
+            visual_adapter=CLIPModel.from_pretrained(args.vh_conf["clip_path"]).visual_projection
+        else:
+            clip_config=AutoConfig.from_pretrained(os.path.join(args.file_path,"clip_config"))
+            clip_encoder=CLIPModel(clip_config).vision_model
+            visual_adapter=CLIPModel(clip_config).visual_projection
         bias_encoder = torch.nn.LSTM(args.vh_conf["encoder_input_size"],
                                     args.vh_conf["encoder_output_size"], 
                                     args.vh_conf["encoder_layer"],
@@ -402,7 +407,7 @@ def build_asr_model(args):
             predictor=predictor,
             **args.model_conf,
         )
-        
+
     elif args.model in ["paraformer", "paraformer_online", "paraformer_bert", "bicif_paraformer",
                         "contextual_paraformer", "neatcontextual_paraformer"]:
         # predictor

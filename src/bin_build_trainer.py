@@ -637,7 +637,7 @@ def build_trainer(modelscope_dict,
     if args.patience in ["null", "none", "None"]:
         args.patience = None
     args.local_rank = local_rank
-
+    args.infer = False
     args.test_set=configs["test_set"]
 
     # set random seed

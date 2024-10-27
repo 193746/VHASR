@@ -263,10 +263,7 @@ class CommonPreprocessor(AbsPreprocessor):
         else:
             self.noises = None
 
-        if clip_path:
-            self.preprocessor = CLIPProcessor.from_pretrained(clip_path)
-        else:
-            self.preprocessor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+        self.preprocessor = CLIPProcessor.from_pretrained(clip_path)
 
     def _speech_process(
             self, data: Dict[str, Union[str, np.ndarray]]
@@ -374,7 +371,6 @@ class CommonPreprocessor(AbsPreprocessor):
                 tokens = self.tokenizer.text2tokens(text)
             text_ints = self.token_id_converter.tokens2ids(tokens)
             data[self.text_name] = np.array(text_ints, dtype=np.int64)
-        # 暂时在这里处理图片
         if "img" in data:
             img = Image.open(data["img"])
             img_prep = self.preprocessor(images=img, return_tensors="np")["pixel_values"]

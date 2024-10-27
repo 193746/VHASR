@@ -130,73 +130,6 @@ class ErrorCalculator(object):
             seqs_true.append(seq_true_text)
         return seqs_hat, seqs_true
 
-
-    # additional code!
-    def convert_to_char_list(self, ys_hat, ys_pad):
-        seqs_hat, seqs_true = [], []
-        tokens_maps_hat,tokens_maps_true=[],[]
-        for i, y_hat in enumerate(ys_hat):
-            y_true = ys_pad[i]
-            eos_true = np.where(y_true == -1)[0]
-            ymax = eos_true[0] if len(eos_true) > 0 else len(y_true)
-            # NOTE: padding index (-1) in y_true is used to pad y_hat
-            
-            seq_hat = [self.char_list[int(idx)] for idx in y_hat[:ymax]]
-            while self.space in seq_hat:
-                seq_hat.remove(self.space)
-            while self.blank in seq_hat:
-                seq_hat.remove(self.blank)
-            tokens_map_hat=get_tokens_map(seq_hat[:-1]) #去掉eos
-            seq_hat_text=sentence_postprocess(seq_hat)[1]  # tokens转为原句
-
-            
-            seq_true = [self.char_list[int(idx)] for idx in y_true[:ymax]]
-            while self.space in seq_true:
-                seq_true.remove(self.space)
-            tokens_map_true=get_tokens_map(seq_true[:-1])
-            seq_true_text=sentence_postprocess(seq_true)[1] # tokens转为原句
-            
-            seqs_hat.append(seq_hat_text)
-            seqs_true.append(seq_true_text)
-
-            tokens_maps_hat.append(tokens_map_hat)
-            tokens_maps_true.append(tokens_map_true)
-        return seqs_hat, seqs_true, tokens_maps_hat,tokens_maps_true
-
-    def convert_to_char_list_for_test(self, ys_hat, ys_pad,ys_hat_lens,ys_pad_lens):
-        seqs_hat, seqs_true = [], []
-        tokens_maps_hat,tokens_maps_true=[],[]
-        for i, y_hat in enumerate(ys_hat):
-            # 
-            # eos_true = np.where(y_true == -1)[0]
-            # ymax = eos_true[0] if len(eos_true) > 0 else len(y_true)
-            # # NOTE: padding index (-1) in y_true is used to pad y_hat
-            
-            hat_len=int(ys_hat_lens[i].item())
-            seq_hat = [self.char_list[int(idx)] for idx in y_hat[:hat_len]]
-            # while self.space in seq_hat:
-            #     seq_hat.remove(self.space)
-            # while self.blank in seq_hat:
-            #     seq_hat.remove(self.blank)
-            tokens_map_hat=get_tokens_map(seq_hat[:-1]) #去掉eos
-            seq_hat_text=sentence_postprocess(seq_hat)[1]  # tokens转为原句
-
-            y_true = ys_pad[i]
-            pad_len=int(ys_pad_lens[i].item())
-            seq_true = [self.char_list[int(idx)] for idx in y_true[:pad_len]]
-            # while self.space in seq_true:
-            #     seq_true.remove(self.space)
-            tokens_map_true=get_tokens_map(seq_true[:-1])
-            seq_true_text=sentence_postprocess(seq_true)[1] # tokens转为原句
-            
-            seqs_hat.append(seq_hat_text)
-            seqs_true.append(seq_true_text)
-
-            tokens_maps_hat.append(tokens_map_hat)
-            tokens_maps_true.append(tokens_map_true)
-        return seqs_hat, seqs_true, tokens_maps_hat,tokens_maps_true
-
-
     # additional code!
     def convert_to_char_single(self, ys_hat):
         seqs_hat=[]
@@ -213,26 +146,6 @@ class ErrorCalculator(object):
             seq_hat_text=sentence_postprocess(seq_hat)[0]  # tokens转为原句
             seqs_hat.append(seq_hat_text)
         return seqs_hat
-    
-    # tensor,tensor,list=>list,list
-    def convert_to_word_span(self,tokens_starts,tokens_ends,tokens_maps):
-        start_list=[]
-        end_list=[]
-        for i in range(len(tokens_maps)):
-            length=len(tokens_maps[i])
-            tokens_map=tokens_maps[i]
-            tokens_start=tokens_starts[i][:length].numpy().tolist()
-            tokens_end=tokens_ends[i][:length].numpy().tolist()
-            if len(tokens_map)==0:
-                word_start=tokens_start
-                word_end=tokens_end
-            else:
-                word_start,word_end=span_token2word(tokens_start,tokens_end,tokens_map)
-            start_list.append(word_start)
-            end_list.append(word_end)
-        return start_list,end_list
-
-
 
     def calculate_cer(self, seqs_hat, seqs_true):
         """Calculate sentence-level CER score.
