@@ -129,7 +129,7 @@ We also provide an inference interface. If you are interested in our work, you c
 ```sh
 cd VHASR
 CUDA_VISIBLE_DEVICES=1 python src/infer.py \
---model_name "{path_to_model}" \
+--model_name "{path_to_model_folder}" \
 --speech_path "{path_to_speech}" \
 --image_path "{path_to_image}" \
 --merge_method 3
