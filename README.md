@@ -129,9 +129,9 @@ We also provide an inference interface. If you are interested in our work, you c
 ```sh
 cd VHASR
 CUDA_VISIBLE_DEVICES=1 python src/infer.py \
---model_name "pretrained_model/VHASR_Flickr8k" \
---speech_path "dataset/Flickr8k/audio/wavs/3385593926_d3e9c21170_0.wav" \
---image_path "dataset/Flickr8k/image/3385593926_d3e9c21170.jpg" \
+--model_name "{path_to_model}" \
+--speech_path "{path_to_speech}" \
+--image_path "{path_to_image}" \
 --merge_method 3
 ```
 
