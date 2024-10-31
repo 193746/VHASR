@@ -295,7 +295,6 @@ def sentence_postprocess_sentencepiece(words):
     sentence = ''.join(word_lists)
     return sentence, real_word_lists
 
-# 为了指针网络的稳定性，不去除<unk>和<OOV>
 def sentence_postprocess2(words: List[Any], time_stamp: List[List] = None):
     middle_lists = []
     word_lists = []

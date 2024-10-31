@@ -96,7 +96,6 @@ class ErrorCalculator(object):
         cer_ctc = float(sum(cers)) / sum(char_ref_lens) if cers else None
         return cer_ctc
 
-    # 有所修改，为英文所用
     def convert_to_char(self, ys_hat, ys_pad):
         """Convert index to character.
 
@@ -119,18 +118,17 @@ class ErrorCalculator(object):
                 seq_hat.remove(self.space)
             while self.blank in seq_hat:
                 seq_hat.remove(self.blank)
-            seq_hat_text=sentence_postprocess2(seq_hat)[0]  # tokens转为原句
+            seq_hat_text=sentence_postprocess(seq_hat)[0]
 
             seq_true = [self.char_list[int(idx)] for idx in y_true if int(idx) != -1]
             while self.space in seq_true:
                 seq_true.remove(self.space)
-            seq_true_text=sentence_postprocess2(seq_true)[0] # 额外代码，tokens转为原句
+            seq_true_text=sentence_postprocess(seq_true)[0]
             
             seqs_hat.append(seq_hat_text)
             seqs_true.append(seq_true_text)
         return seqs_hat, seqs_true
 
-    # additional code!
     def convert_to_char_single(self, ys_hat):
         seqs_hat=[]
         for i, y_hat in enumerate(ys_hat):
@@ -143,7 +141,7 @@ class ErrorCalculator(object):
                     break
                 else:
                     seq_hat.append(chr)
-            seq_hat_text=sentence_postprocess(seq_hat)[0]  # tokens转为原句
+            seq_hat_text=sentence_postprocess(seq_hat)[0]
             seqs_hat.append(seq_hat_text)
         return seqs_hat
 
